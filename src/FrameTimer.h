@@ -78,20 +78,28 @@ public:
     float getDue(){
         return due;
     }
-
+	float valCubic(){
+		float p=val();
+		return valCubic(p);
+	}
+	float valCubic(float p){
+		p/=.5;
+		if(p<1) return .5*p*p*p;
+		p-=2;
+		return .5*(p*p*p+2);
+	}
 	float valEase(){
 		float p=val();
 		return sin(p *HALF_PI);
 	}
 	float valFade(){
-		float d_=.05;
+		float d_=.5;
 		float p=val();
 		if(p<d_){
-			return sin(p/d_*HALF_PI);
-		}else if(p>1.0-d_){
-			return 1.0-sin((p-(1.0-d_))/d_*HALF_PI);
+			return valCubic(p/.5);
 		}else{
-			return 1;
+			p-=.5;
+			return 1.0-valCubic(p/.5);
 		}
 	}
 	bool isStart(){

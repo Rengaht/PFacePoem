@@ -570,6 +570,24 @@ obj/linuxarmv6l/Release/src/main.o: \
  /home/pi/openFrameworks0.10/libs/openFrameworks/3d/of3dUtils.h \
  /home/pi/openFrameworks0.10/libs/openFrameworks/3d/ofCamera.h \
  /home/pi/openFrameworks0.10/libs/openFrameworks/3d/ofEasyCam.h \
+ /home/pi/openFrameworks0.10/addons/ofxXmlSettings/src/ofxXmlSettings.h \
+ /home/pi/openFrameworks0.10/addons/ofxXmlSettings/libs/tinyxml.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/src/ofxOsc.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/src/ofxOscArg.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/src/ofxOscMessage.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/src/ofxOscSender.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/OscTypes.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/OscOutboundPacketStream.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/OscTypes.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/OscException.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/ip/UdpSocket.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/ip/NetworkingUtils.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/ip/IpEndpointName.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/src/ofxOscBundle.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/src/ofxOscReceiver.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/OscPacketListener.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/OscReceivedElements.h \
+ /home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/../ip/PacketListener.h \
  /home/pi/openFrameworks0.10/addons/ofxFaceTracker/src/ofxFaceTracker.h \
  /home/pi/openFrameworks0.10/addons/ofxCv/src/ofxCv.h \
  /home/pi/openFrameworks0.10/addons/ofxCv/libs/ofxCv/include/ofxCv/Utilities.h \
@@ -597,7 +615,9 @@ obj/linuxarmv6l/Release/src/main.o: \
  /home/pi/openFrameworks0.10/addons/ofxFaceTracker/libs/FaceTracker/include/FaceTracker/FCheck.h \
  /home/pi/openFrameworks0.10/addons/ofxFaceTracker/libs/FaceTracker/include/FaceTracker/PAW.h \
  /home/pi/openFrameworks0.10/addons/ofxFaceTracker/src/ExpressionClassifier.h \
- /home/pi/openFrameworks0.10/addons/ofxFaceTracker/src/Expression.h
+ /home/pi/openFrameworks0.10/addons/ofxFaceTracker/src/Expression.h \
+ /home/pi/openFrameworks0.10/apps/myApps/PFacePoem/src/FrameTimer.h \
+ /home/pi/openFrameworks0.10/addons/ofxFaceTracker/src/ofxFaceTrackerThreaded.h
 
 /home/pi/openFrameworks0.10/apps/myApps/PFacePoem/src/ofApp.h:
 
@@ -1777,6 +1797,42 @@ obj/linuxarmv6l/Release/src/main.o: \
 
 /home/pi/openFrameworks0.10/libs/openFrameworks/3d/ofEasyCam.h:
 
+/home/pi/openFrameworks0.10/addons/ofxXmlSettings/src/ofxXmlSettings.h:
+
+/home/pi/openFrameworks0.10/addons/ofxXmlSettings/libs/tinyxml.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/src/ofxOsc.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/src/ofxOscArg.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/src/ofxOscMessage.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/src/ofxOscSender.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/OscTypes.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/OscOutboundPacketStream.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/OscTypes.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/OscException.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/ip/UdpSocket.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/ip/NetworkingUtils.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/ip/IpEndpointName.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/src/ofxOscBundle.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/src/ofxOscReceiver.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/OscPacketListener.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/OscReceivedElements.h:
+
+/home/pi/openFrameworks0.10/addons/ofxOsc/libs/oscpack/src/osc/../ip/PacketListener.h:
+
 /home/pi/openFrameworks0.10/addons/ofxFaceTracker/src/ofxFaceTracker.h:
 
 /home/pi/openFrameworks0.10/addons/ofxCv/src/ofxCv.h:
@@ -1832,3 +1888,7 @@ obj/linuxarmv6l/Release/src/main.o: \
 /home/pi/openFrameworks0.10/addons/ofxFaceTracker/src/ExpressionClassifier.h:
 
 /home/pi/openFrameworks0.10/addons/ofxFaceTracker/src/Expression.h:
+
+/home/pi/openFrameworks0.10/apps/myApps/PFacePoem/src/FrameTimer.h:
+
+/home/pi/openFrameworks0.10/addons/ofxFaceTracker/src/ofxFaceTrackerThreaded.h:
