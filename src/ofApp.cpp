@@ -8,6 +8,8 @@ float ofApp::CameraScale=0;
 void ofApp::setup(){
 
 	ofSetVerticalSync(true);
+	ofHideCursor();
+
 	cam.setup(CAM_WIDTH, CAM_HEIGHT);
 	CameraScale=max((float)ofGetWidth()/CAM_WIDTH,(float)ofGetHeight()/CAM_HEIGHT);
 
@@ -91,6 +93,7 @@ void ofApp::updateOsc(){
 	if(_receiver.hasWaitingMessages()){
 		ofxOscMessage m;
 		_receiver.getNextMessage(m);
+		ofLog()<<"get message: "<<m.getAddress();
 		if(m.getAddress()=="/reset") setStatus(PStatus::SLEEP);
 	}
 }
@@ -120,7 +123,7 @@ void ofApp::draw(){
 	
 	ofSetColor(255);
 
-	cam.draw(0, 0);
+	cam.draw(cam.getWidth(), 0,-cam.getWidth(),cam.getHeight());
 	
 	/* detect frame */
 	ofPushStyle();
@@ -181,7 +184,7 @@ void ofApp::draw(){
 }
 
 void ofApp::keyPressed(int key) {
-	if(key == 'r') {
+/*	if(key == 'r') {
 		tracker.reset();
 		classifier.reset();
 	}
@@ -196,7 +199,14 @@ void ofApp::keyPressed(int key) {
 	}
 	if(key == 'l') {
 		classifier.load("expressions");
+	}*/
+	switch(key){
+		case 'r':
+		case 'R':
+			setStatus(PStatus::SLEEP);
+			break;
 	}
+
 }
 
 ofVec3f ofApp::getMeshBounding(const ofMesh& mesh){
