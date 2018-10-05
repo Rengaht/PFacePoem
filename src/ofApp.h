@@ -48,4 +48,9 @@ public:
 	vector<string> _str_ip;
 	void loadXmlSetting();
 
+	float _mood;
+
+	ofShader _shader_blur,_shader_glitch;
+	ofFbo _fbo1,_fbo2;
+
 };

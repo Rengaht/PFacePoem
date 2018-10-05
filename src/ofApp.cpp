@@ -28,13 +28,19 @@ void ofApp::setup(){
 
 	_last_millis=ofGetElapsedTimeMillis();
 
+	_shader_blur.load("shadersES2/shaderBlurX");
+	_shader_glitch.load("shadersES2/glitch");
 
+	_fbo1.allocate(ofGetWidth(),ofGetHeight());
+	_fbo2.allocate(ofGetWidth(),ofGetHeight());
+	
 }
 
 void ofApp::update(){
 	
 	if(_status!=PStatus::POEM){
 		cam.update();
+		cam.getPixelsRef().mirror(true,false);
 		if(cam.isFrameNew()){
 			if(tracker.update(toCv(cam))){
 				classifier.classify(tracker);
@@ -57,6 +63,8 @@ void ofApp::update(){
 			_timer_detect.update(dt_);
 			if(found_){
 				_face_pos=tracker.getPosition();
+				_mood=classifier.getProbability(0);
+
 				auto mesh_=tracker.getMeanObjectMesh();
 				ofVec3f size_=getMeshBounding(mesh_);
 				float scale_=tracker.getScale();
@@ -85,7 +93,7 @@ void ofApp::setStatus(PStatus set_){
 			ofLog()<<"Face detect!!!";
 			break;
 		case POEM:
-			sendFace(classifier.getProbability(0));
+			sendFace(_mood);
 			break;
 	}
 }
@@ -99,8 +107,13 @@ void ofApp::updateOsc(){
 }
 
 void ofApp::sendFace(float mood_){
+	
+	if(mood_>0.75) mood_=0;
+	else mood_=1.0-mood_;
+
+	ofLog()<<"send face: "<<mood_<<" to "<<_str_ip[0];
 	ofxOscSender sender_;
-	sender_.setup(_str_ip[1],PORT);
+	sender_.setup(_str_ip[0],PORT);
 
 	ofxOscMessage message_;
 	message_.setAddress("/face");
@@ -115,6 +128,9 @@ void ofApp::draw(){
 	float offy=10;
 	float line_=10;
 
+	_fbo1.begin();
+	ofClear(0);
+
 
 	ofPushMatrix();
 	ofTranslate(ofGetWidth()*.5-CameraScale*CAM_WIDTH*.5,ofGetHeight()*.5-CameraScale*CAM_HEIGHT*.5);
@@ -123,17 +139,18 @@ void ofApp::draw(){
 	
 	ofSetColor(255);
 
-	cam.draw(cam.getWidth(), 0,-cam.getWidth(),cam.getHeight());
+	cam.draw(0,cam.getHeight(),cam.getWidth(),-cam.getHeight());
 	
+
 	/* detect frame */
 	ofPushStyle();
 	ofSetColor(255,255.0*_timer_blink.valFade());
 	ofNoFill();
-	if(tracker.getFound()){
+	//ofSetLineWidth(5);
+	if(tracker.getFound()){ 
 		ofPushMatrix();
 		ofTranslate(_face_rect.getTopLeft());
 			ofDrawRectangle(0,0,_face_rect.width,_face_rect.height);
-
 		ofPopMatrix();
 	}else{
 		if(_status==PStatus::SLEEP){
@@ -149,6 +166,29 @@ void ofApp::draw(){
 	ofPopStyle();
 	ofPopMatrix();
 
+	_fbo1.end();
+
+	_fbo2.begin();
+	ofClear(0);
+	_shader_glitch.begin();	
+	_shader_glitch.setUniform1f("amount",3);
+	_shader_glitch.setUniform1f("phi",ofRandom(-100,100));
+	_shader_glitch.setUniform1f("angle",PI*sin(ofGetFrameNum()%40/40.0+ofRandom(-10,10)));
+	_shader_glitch.setUniform1f("windowWidth",ofGetWidth());
+	_shader_glitch.setUniform1f("windowHeight",ofGetHeight());
+	_shader_glitch.setUniformTexture("tex0",_fbo1.getTexture(),0);
+		_fbo1.draw(0,0);
+	_fbo2.end();
+	_fbo1.begin();
+	ofClear(0);
+	_shader_blur.begin();
+	_shader_blur.setUniform1f("windowWidth",ofGetWidth());
+	_shader_blur.setUniform1f("windowHeight",ofGetHeight());
+	_shader_blur.setUniformTexture("tex0",_fbo2.getTexture(),0);
+		_fbo2.draw(0,0);
+	_shader_blur.end();
+	_fbo1.end();
+	_fbo1.draw(0,0);
 
 	string hint_="";
 	switch(_status){
@@ -168,7 +208,8 @@ void ofApp::draw(){
 	ofSetColor(255);
 		ofDrawBitmapString(ofToString(ofGetFrameRate()),offx,offy+=line_);
 		ofDrawBitmapString(hint_,offx,offy+=line_);
-
+		ofDrawBitmapString("mood= "+ofToString(_mood),offx,offy+=line_);
+	/*if(tracker.getFound()){
 	ofPushMatrix();
 	ofTranslate(ofGetWidth()*.5-CameraScale*CAM_WIDTH*.5,ofGetHeight()*.5-CameraScale*CAM_HEIGHT*.5);
 	ofTranslate(_face_rect.getBottomLeft()*CameraScale);
@@ -178,7 +219,7 @@ void ofApp::draw(){
 			ofDrawBitmapString(classifier.getDescription(i)+"= "+ofToString(classifier.getProbability(i)),0,(i+2)*line_);
 		}
 	ofPopMatrix();
-
+	}*/
 	ofPopStyle();
 
 }
@@ -236,10 +277,12 @@ void ofApp::exit(){
 void ofApp::loadXmlSetting(){
 	ofxXmlSettings param_;
 	param_.loadFile("Pdata.xml");
-	_str_ip.push_back(param_.getValue("IP_FACE",""));
+	
+	_str_ip.push_back(param_.getValue("IP_BROADCAST",""));
+	/*_str_ip.push_back(param_.getValue("IP_FACE",""));
 	_str_ip.push_back(param_.getValue("IP_POEM",""));
 	_str_ip.push_back(param_.getValue("IP_DISPLAY1",""));
 	_str_ip.push_back(param_.getValue("IP_DISPLAY2",""));
 	_str_ip.push_back(param_.getValue("IP_DISPLAY3",""));
-
+	*/
 }
