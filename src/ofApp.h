@@ -31,7 +31,8 @@ public:
 
 
 	float _last_millis;
-	FrameTimer _timer_detect,_timer_blink;
+	FrameTimer _timer_detect,_timer_blink,_timer_sleep;
+	int SleepTime;
 
 	enum PStatus {SLEEP,DETECT,POEM};
 	PStatus _status;

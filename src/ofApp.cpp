@@ -20,11 +20,16 @@ void ofApp::setup(){
 	_receiver.setup(PORT);
 
 	tracker.setup();
-	_timer_detect=FrameTimer(3000);
+	tracker.setIterations(2);
+	tracker.setClamp(1);
+	tracker.setAttempts(2);
+	_timer_detect=FrameTimer(500);
 	_timer_blink=FrameTimer(1000);
 	_timer_blink.restart();
+	ofLog()<<"sleep time= "<<SleepTime;
+	_timer_sleep=FrameTimer(SleepTime);
 
-	_status=PStatus::SLEEP;
+	//_status=PStatus::SLEEP;
 
 	_last_millis=ofGetElapsedTimeMillis();
 
@@ -33,7 +38,7 @@ void ofApp::setup(){
 
 	_fbo1.allocate(ofGetWidth(),ofGetHeight());
 	_fbo2.allocate(ofGetWidth(),ofGetHeight());
-	
+	setStatus(PStatus::SLEEP);
 }
 
 void ofApp::update(){
@@ -51,12 +56,19 @@ void ofApp::update(){
 	float dt_=ofGetElapsedTimeMillis()-_last_millis;
 	_last_millis+=dt_;
 	_timer_blink.update(dt_);
+	
 	if(_timer_blink.val()==1) _timer_blink.restart();
 
 	bool found_=tracker.getFound();
 
 	switch(_status){
 		case SLEEP:
+			_timer_sleep.update(dt_);
+			if(_timer_sleep.val()==1){
+				ofLog()<<"auto play poem";
+				_mood=ofRandom(1);
+				setStatus(PStatus::POEM);
+			}
 			if(found_) setStatus(PStatus::DETECT);
 			break;
 		case DETECT:
@@ -85,6 +97,7 @@ void ofApp::setStatus(PStatus set_){
 	ofLog()<<"set status= "<<set_;
 	switch(set_){
 		case SLEEP:
+			_timer_sleep.restart();
 			_timer_blink.restart();
 			break;
 		case DETECT:
@@ -208,6 +221,7 @@ void ofApp::draw(){
 	ofSetColor(255);
 		ofDrawBitmapString(ofToString(ofGetFrameRate()),offx,offy+=line_);
 		ofDrawBitmapString(hint_,offx,offy+=line_);
+		if(_status==PStatus::SLEEP) ofDrawBitmapString(_timer_sleep.val()*SleepTime/1000,offx,offy+=line_);
 		ofDrawBitmapString("mood= "+ofToString(_mood),offx,offy+=line_);
 	/*if(tracker.getFound()){
 	ofPushMatrix();
@@ -279,6 +293,7 @@ void ofApp::loadXmlSetting(){
 	param_.loadFile("Pdata.xml");
 	
 	_str_ip.push_back(param_.getValue("IP_BROADCAST",""));
+	SleepTime=param_.getValue("SLEEP_TIME",60000);
 	/*_str_ip.push_back(param_.getValue("IP_FACE",""));
 	_str_ip.push_back(param_.getValue("IP_POEM",""));
 	_str_ip.push_back(param_.getValue("IP_DISPLAY1",""));
